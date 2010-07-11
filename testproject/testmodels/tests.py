@@ -18,8 +18,8 @@ DATA_PATH = path.join(path.dirname(__file__), 'testdata')
 print DATA_PATH
 
 
-class TestDumpRestore(TestCase):
-    data_set = 'empty'
+class TestDumpRestoreBase(object):
+    data_set = None
 
     def open_fixture(self):
         return open(path.join(DATA_PATH, self.data_set, 'dump.json'))
@@ -47,3 +47,16 @@ class TestDumpRestore(TestCase):
         result = dumpdata.Command().handle(format='json', indent=4) + '\n'
         with self.open_fixture() as reference_fixture:
             self.assertEqual(result, reference_fixture.read())
+
+
+def make_tests():
+    with open(path.join(DATA_PATH, 'index')) as index:
+        data_sets = [line.strip() for line in index]
+
+    for data_set in data_sets:
+        print 'Data set', data_set
+        cls_name = 'TestDumpRestore_%s' % data_set
+        globals()[cls_name] = type(cls_name, (TestDumpRestoreBase, TestCase), {'data_set': data_set})
+
+ 
+make_tests()
