@@ -7,6 +7,7 @@ Replace these with more appropriate tests for your application.
 
 from os import path
 from io import BytesIO
+from difflib import unified_diff
 
 from django.test import TestCase
 from django.core import serializers
@@ -38,7 +39,7 @@ class TestDumpRestoreBase(object):
         output = BytesIO(encoding=None)
         dumprestore.dump(file=output)
         with self.open_dump() as reference_dump:
-            self.assertEqual(output.getvalue(), reference_dump.read())
+            self.assertTextEqual(reference_dump.read(), output.getvalue())
 
     def test_restore(self):
         with self.open_dump() as dump:
@@ -46,8 +47,14 @@ class TestDumpRestoreBase(object):
 
         result = dumpdata.Command().handle(format='json', indent=4) + '\n'
         with self.open_fixture() as reference_fixture:
-            self.assertEqual(result, reference_fixture.read())
+            self.assertTextEqual(reference_fixture.read(), result)
 
+    def assertTextEqual(self, expected, got):
+        self.assertEqual(
+            got,
+            expected,
+            '\n' + '\n'.join(unified_diff(expected.splitlines(), got.splitlines(), 'expected', 'got')),
+        )
 
 def make_tests():
     with open(path.join(DATA_PATH, 'index')) as index:
