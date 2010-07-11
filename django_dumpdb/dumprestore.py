@@ -47,9 +47,9 @@ class RestoreError(DumpRestoreError):
 
 
 DISABLE_FOREIGN_KEYS_SQL = {
-    'sqlite3': None,
-    'mysql': 'SET foreign_key_checks = 0',
-    'postgresql_psycopg2': 'SET CONSTRAINTS ALL DEFERRED',
+    'django.db.backends.sqlite3': None,
+    'django.db.backends.mysql': 'SET foreign_key_checks = 0',
+    'django.db.backends.postgresql_psycopg2': 'SET CONSTRAINTS ALL DEFERRED',
 }
 
 
@@ -99,10 +99,10 @@ def server_side_cursor(connection):
     if not connection.connection:
         connection.cursor() # initialize DB connection
 
-    backend = settings.DATABASE_ENGINE
-    if backend == 'postgresql_psycopg2':
+    backend = connection.settings_dict['ENGINE']
+    if backend == 'django.db.backends.postgresql_psycopg2':
         return connection.connection.cursor(name='dump')
-    elif backend == 'mysql':
+    elif backend == 'django.db.backends.mysql':
         from MySQLdb.cursors import SSCursor
         return connection.connection.cursor(SSCursor)
     else:
@@ -225,7 +225,7 @@ def truncate_table(table):
 
 def disable_foreign_keys():
     """ Disable foreign key constraint checks using DB-specific SQL. """
-    sql = DISABLE_FOREIGN_KEYS_SQL[settings.DATABASE_ENGINE]
+    sql = DISABLE_FOREIGN_KEYS_SQL[connection.settings_dict['ENGINE']]
     if sql:
         cursor = connection.cursor()
         cursor.execute(sql)
