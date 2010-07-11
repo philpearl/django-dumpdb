@@ -1,0 +1,40 @@
+[
+    {
+        "pk": 1, 
+        "model": "testmodels.person", 
+        "fields": {
+            "birth_date": "2010-07-11 04:03:18", 
+            "name": "Alien 1", 
+            "parent": 2
+        }
+    }, 
+    {
+        "pk": 2, 
+        "model": "testmodels.person", 
+        "fields": {
+            "birth_date": "2010-07-11 04:03:52", 
+            "name": "Alien 2", 
+            "parent": 1
+        }
+    }, 
+    {
+        "pk": 1, 
+        "model": "testmodels.family", 
+        "fields": {
+            "members": [
+                1, 
+                2
+            ]
+        }
+    }, 
+    {
+        "pk": 2, 
+        "model": "testmodels.family", 
+        "fields": {
+            "members": [
+                1, 
+                2
+            ]
+        }
+    }
+]
