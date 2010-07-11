@@ -22,7 +22,8 @@
         "model": "testmodels.family", 
         "fields": {
             "members": [
-                1
+                1, 
+                2
             ]
         }
     }

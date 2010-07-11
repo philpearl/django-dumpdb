@@ -6,6 +6,7 @@
 
 # ["testmodels_family_members", ["id", "family_id", "person_id"]]
 [1, 1, 1]
+[2, 1, 2]
 
 # ["testmodels_family", ["id"]]
 [1]
