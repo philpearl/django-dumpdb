@@ -1,0 +1,12 @@
+# Django database dump
+
+# ["testmodels_person", ["id", "name", "birth_date", "parent_id"]]
+[1, "Dad", "2010-07-11 04:03:18", null]
+[2, "Son", "2010-07-11 04:03:52", 1]
+
+# ["testmodels_family_members", ["id", "family_id", "person_id"]]
+[1, 1, 1]
+
+# ["testmodels_family", ["id"]]
+[1]
+
