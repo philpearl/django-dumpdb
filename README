@@ -1,0 +1,53 @@
+=============
+django-dumpdb
+=============
+
+``django-dumpdb`` saves and restored the contents of the database in a simple database-independent format.
+
+It is designed to be fast and memory efficient, and can handle a database of
+ANY size, in a reasonable time, with a fixed memory footprint.
+
+Features
+========
+
+  * Stream-oriented file format.
+  * Accesses the database directly, bypassing the ORM layer for better performance.
+  * Uses server-side database cursors to preserve memory.
+  * Can hanldle data with ``ForeignKey('self')`` and forward references.
+
+Supported database backends
+===========================
+
+``django-dumpdb`` uses server-side cursors and deferred foreign key checks, which
+is not supported by Django as of now. Therefore it has to use some DB-specific
+code. The following database backends are currently supported:
+
+  * ``postgresql_psycopg2``
+  * ``mysql``
+  * ``sqlite``
+
+Installation
+============
+
+Add ``django_dumpdb`` to your ``INSTALLED_APPS``.
+
+Usage
+=====
+
+::
+
+    manage.py dumpdb > db.dump
+    manage.py restoredb < db.dump
+
+Or even::
+
+    ssh remotehost /var/www/myproject/manage.py dumpdb | manage.py restoredb
+
+``django-dumpdb`` can also be used to migrate the data to another database (for
+example, from MySQL to PostgreSQL).
+
+Disclaimer
+==========
+
+USE AT YOUR OWN RISK! THIS SOFTWARE MAY CONTAIN BUGS, AND MAY DESTROY YOUR DATA
+AND KILL YOU PARENTS, EVEN IF USED CORRECTLY. YOU HAVE BEEN WARNED!
