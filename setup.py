@@ -14,7 +14,7 @@ def get_long_description():
 setup(
     name='django-dumpdb',
     version=django_dumpdb.__version__,
-    description='Django dumpdb/restoredb management commands',
+    description='A better, faster, stronger alternative for manage.py dumpdata',
     long_description=get_long_description(),
     author='Andrey Golovizin',
     author_email='golovizin@gmail.com',
