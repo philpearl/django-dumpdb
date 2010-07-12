@@ -19,7 +19,7 @@ Supported database backends
 ===========================
 
 ``django-dumpdb`` uses server-side cursors and deferred foreign key checks, which
-is not supported by Django as of now. Therefore it has to use some DB-specific
+is not supported by Django as of now. Therefore, it has to use some DB-specific
 code. The following database backends are currently supported:
 
   * ``postgresql_psycopg2``
@@ -49,5 +49,5 @@ example, from MySQL to PostgreSQL).
 Disclaimer
 ==========
 
-USE AT YOUR OWN RISK! THIS SOFTWARE MAY CONTAIN BUGS, AND MAY DESTROY YOUR DATA
-AND KILL YOU PARENTS, EVEN IF USED CORRECTLY. YOU HAVE BEEN WARNED!
+USE THIS AT YOUR OWN RISK! THIS SOFTWARE MAY CONTAIN BUGS, AND MAY DESTROY YOUR
+DATA AND KILL YOU PARENTS, EVEN IF USED CORRECTLY. YOU HAVE BEEN WARNED!
