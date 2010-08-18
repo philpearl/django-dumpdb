@@ -101,7 +101,9 @@ def server_side_cursor(connection):
 
     backend = connection.settings_dict['ENGINE']
     if backend == 'django.db.backends.postgresql_psycopg2':
-        return connection.connection.cursor(name='dump')
+        cursor = connection.connection.cursor(name='dump')
+        cursor.tzinfo_factory = None
+        return cursor
     elif backend == 'django.db.backends.mysql':
         from MySQLdb.cursors import SSCursor
         return connection.connection.cursor(SSCursor)
