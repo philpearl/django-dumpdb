@@ -36,7 +36,7 @@ class TestDumpRestoreBase(object):
             for obj in objects:
                 obj.save()
 
-        output = BytesIO(encoding=None)
+        output = BytesIO()
         dumprestore.dump(file=output)
         with self.open_dump() as reference_dump:
             self.assertTextEqual(reference_dump.read(), output.getvalue())
