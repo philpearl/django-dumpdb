@@ -1,0 +1,3 @@
+include COPYING run_tests.sh
+include testproject/testmodels/testdata/index
+recursive-include testproject/testmodels/testdata dump dump.json

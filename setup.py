@@ -13,14 +13,16 @@ def get_long_description():
 
 setup(
     name='django-dumpdb',
-    version=django_dumpdb.__version__,
+    version=str(django_dumpdb.__version__),
     description='A better, faster, stronger alternative for manage.py dumpdata',
     long_description=get_long_description(),
     author='Andrey Golovizin',
     author_email='golovizin@gmail.com',
     url='http://code.google.com/p/django-dumpdb/',
-    packages=['django_dumpdb'],
+    packages=['django_dumpdb', 'testproject', 'testproject.testmodels'],
+    include_package_data=True,
     license='MIT',
+    platforms=['platform-independent'],
     classifiers=[
         'Development Status :: 4 - Beta',
         'Operating System :: OS Independent',
