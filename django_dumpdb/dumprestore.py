@@ -120,7 +120,7 @@ def dump_table(table, fields, pk, converters):
     yield '# %s' % dumps((table, fields))
     cursor.execute('SELECT %s FROM %s ORDER BY %s' % (fields_sql, table_sql, pk_sql))
     for row in cursor:
-        yield dumps([converter(value) for converter, value in zip(converters, row)])
+        yield dumps([converter(value, connection=connection) for converter, value in zip(converters, row)])
     yield ''
     cursor.close()
 
