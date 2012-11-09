@@ -26,6 +26,7 @@ from itertools import chain
 
 from json import loads
 
+from django import VERSION
 from django.db import connection, transaction
 from django.db.models import get_apps, get_models
 from django.conf import settings
@@ -88,10 +89,18 @@ class CleverIterator(object):
         return iter(self).next()
 
 
+def get_models_compatibility(app):
+    """ Version of get_models compatible with < Django 1.2 """
+    if VERSION < (1, 2):
+        return get_models(app)
+    else:
+        return get_models(app, include_auto_created=True)
+
+
 def get_all_models():
     """ Get all models, grouped by apps. """
     for app in get_apps():
-        for model in get_models(app, include_auto_created=True):
+        for model in get_models_compatibility(app):
             yield model
 
 
@@ -99,12 +108,12 @@ def server_side_cursor(connection):
     if not connection.connection:
         connection.cursor() # initialize DB connection
 
-    backend = connection.settings_dict['ENGINE']
-    if backend == 'django.db.backends.postgresql_psycopg2':
+    backend = connection.__module__
+    if backend.startswith('django.db.backends.postgresql_psycopg2'):
         cursor = connection.connection.cursor(name='dump')
         cursor.tzinfo_factory = None
         return cursor
-    elif backend == 'django.db.backends.mysql':
+    elif backend.startswith('django.db.backends.mysql'):
         from MySQLdb.cursors import SSCursor
         return connection.connection.cursor(SSCursor)
     else:
@@ -120,15 +129,26 @@ def dump_table(table, fields, pk, converters):
     yield '# %s' % dumps((table, fields))
     cursor.execute('SELECT %s FROM %s ORDER BY %s' % (fields_sql, table_sql, pk_sql))
     for row in cursor:
-        yield dumps([converter(value, connection=connection) for converter, value in zip(converters, row)])
+        yield dumps([converter(value) for converter, value in zip(converters, row)])
     yield ''
     cursor.close()
+
+
+def get_db_prep_value_compatibility_closure(field):
+    """ Version of field.get_db_prep_value compatible with < Django 1.2 """
+    def get_db_prep_value(value):
+        if VERSION < (1, 2):
+            return field.get_db_prep_value(value)
+        else:
+            return field.get_db_prep_value(value, connection=connection)
+    
+    return get_db_prep_value
 
 
 def dump_model(model):
     table = model._meta.db_table
     fields = [field.column for field in model._meta.local_fields]
-    converters = [field.get_db_prep_value for field in model._meta.local_fields]
+    converters = [get_db_prep_value_compatibility_closure(field) for field in model._meta.local_fields]
     pk = model._meta.pk.column
     return dump_table(table, fields, pk, converters)
 
