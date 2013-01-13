@@ -23,4 +23,4 @@
 """Django dumpdb/restoredb management commands."""
 
 # following PEP 386
-__version__ = "0.3"
+__version__ = "0.4"

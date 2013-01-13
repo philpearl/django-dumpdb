@@ -247,8 +247,11 @@ def truncate_table(table):
 
 def disable_foreign_keys():
     """ Disable foreign key constraint checks using DB-specific SQL. """
-    sql = DISABLE_FOREIGN_KEYS_SQL[connection.settings_dict.get('ENGINE', 
-        'django.db.backends.%s' % settings.DATABASE_ENGINE)]
+    if 'ENGINE' in connection.settings_dict:
+        sql = DISABLE_FOREIGN_KEYS_SQL[connection.settings_dict['ENGINE']]
+    else:
+        sql = DISABLE_FOREIGN_KEYS_SQL['django.db.backends.%s' % settings.DATABASE_ENGINE]
+    
     if sql:
         cursor = connection.cursor()
         cursor.execute(sql)
